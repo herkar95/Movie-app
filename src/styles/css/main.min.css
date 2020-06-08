@@ -26,6 +26,28 @@
   font-size: 3rem;
 }
 
+.item-details > i {
+  margin-right: 0.3rem;
+  vertical-align: middle;
+  color: #ff7700;
+}
+
+.item-details > i.fas.fa-calendar-alt {
+  vertical-align: baseline;
+}
+
+.favorites > i {
+  font-size: 3rem;
+  color: #e46969;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.favorites > i:hover {
+  animation: heartbeat 1s infinite 0.25s;
+  animation-direction: forwards;
+}
+
 * {
   font-family: "Lato";
 }
@@ -34,8 +56,48 @@
   border-bottom: 1px solid #ff7700;
 }
 
+.movies-container h1 {
+  color: #ff7700;
+  font-weight: lighter;
+}
+
+.movies-container img {
+  width: 300px;
+  max-width: 100%;
+}
+
+@media screen and (min-width: 768px) {
+  .movies-container > div:nth-child(even) {
+    flex-direction: row-reverse;
+  }
+}
 input[type=submit]:active {
   background-color: #bd5917;
+}
+
+.logo {
+  max-height: 133px;
+}
+
+@keyframes heartbeat {
+  0% {
+    transform: scale(0.9);
+  }
+  20% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(0.9);
+  }
+  60% {
+    transform: scale(1);
+  }
+  80% {
+    transform: scale(0.9);
+  }
+  100% {
+    transform: scale(0.9);
+  }
 }
 
 /*# sourceMappingURL=main.min.css.map */

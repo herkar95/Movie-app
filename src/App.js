@@ -7,57 +7,61 @@ import Header from './js/containers/Header';
 class App extends React.Component {
   state = {
     movies: [],
+    searchQuery: '',
+    displayError: false,
+    errorMessage: '',
   };
 
   // API request to OMDb
-  componentDidMount() {
-    Axios.get('http://www.omdbapi.com/?apikey=83d7041f&s=Dark+Souls').then(
-      (response) => {
+  handleSearchRequest = () => {
+    Axios.get(
+      'http://www.omdbapi.com/?apikey=83d7041f&plot=short&s=' +
+        this.state.searchQuery
+    )
+      .then((response) => {
         const movies = response.data.Search.map((movie) => {
-          movie = { ...movie, isInteresting: true, id: uuidv4() };
+          movie = { ...movie, isFavorite: false, id: uuidv4() }; // Add custom props
+          movie.Type = movie.Type.replace(
+            /\b\w/g,
+            (l) => l.toUpperCase() //Capitalize first letter
+          );
           return movie;
         });
-        this.setState({ movies });
-      }
-    );
-  }
+        this.setState({ movies, displayError: false });
+      })
+      .catch(() => {
+        const errorMessage =
+          this.state.searchQuery.trim().length < 3
+            ? 'Search query must be at least three characters long!'
+            : 'No movies found. Try searching for something else!';
+        this.setState({ displayError: true, errorMessage, movies: [] });
+      });
+  };
 
-  handleMarkComplete = (id) => {
-    this.setState({
-      menuLinks: this.state.menuLinks.map((item) => {
-        if (item.id === id) {
-          item.isChecked = !item.isChecked;
-        }
-        return item;
-      }),
+  // Updates the search query
+  handleUpdateQuery = (query) => {
+    this.setState({ searchQuery: query });
+  };
+
+  // Updates the favorite status of a movie item
+  handleFavorite = (id) => {
+    const movies = this.state.movies.map((movie) => {
+      if (movie.id === id) movie.isFavorite = !movie.isFavorite;
+      return movie;
     });
-  };
-
-  handleDelete = (id) => {
-    const menuLinks = this.state.menuLinks.filter((c) => c.id !== id);
-    this.setState({ menuLinks });
-  };
-
-  handleAddMenuItem = (title) => {
-    const newMenuItem = {
-      id: uuidv4(),
-      title,
-      url: '/' + title,
-      isChecked: false,
-    };
-    this.setState({ menuLinks: [...this.state.menuLinks, newMenuItem] });
-  };
-
-  handleDeleteAlbums = () => {
-    const albums = this.state.albums.filter((item) => item.id % 2 === 0);
-    this.setState({ albums });
+    this.setState({ movies });
   };
 
   render() {
     return (
       <div className="container">
-        <Header />
-        <Movies movies={this.state.movies} />
+        <Header
+          onSearchRequest={this.handleSearchRequest}
+          onUpdateQuery={this.handleUpdateQuery}
+          displayError={this.state.displayError}
+          errorMessage={this.state.errorMessage}
+        />
+        <Movies movies={this.state.movies} onFavorite={this.handleFavorite} />
       </div>
     );
   }

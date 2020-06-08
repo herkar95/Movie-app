@@ -1,3 +1,20 @@
 .movies-container > div {
   border-bottom: 1px solid $primary-orange;
 }
+
+.movies-container h1 {
+  color: $primary-orange;
+  font-weight: lighter;
+}
+
+.movies-container img {
+  width: 300px;
+  max-width: 100%;
+}
+
+// Medium screens and up
+@media screen and (min-width: 768px) {
+  .movies-container > div:nth-child(even) {
+    flex-direction: row-reverse;
+  }
+}
