@@ -1,6 +1,4 @@
 import React from 'react';
-import { v4 as uuidv4 } from 'uuid';
-import Axios from 'axios';
 import Movies from './js/components/Movies';
 import Header from './js/containers/Header';
 
@@ -12,35 +10,15 @@ class App extends React.Component {
     errorMessage: '',
   };
 
-  // API request to OMDb
-  handleSearchRequest = () => {
-    Axios.get(
-      'http://www.omdbapi.com/?apikey=83d7041f&plot=short&s=' +
-        this.state.searchQuery
-    )
-      .then((response) => {
-        const movies = response.data.Search.map((movie) => {
-          movie = { ...movie, isFavorite: false, id: uuidv4() }; // Add custom props
-          movie.Type = movie.Type.replace(
-            /\b\w/g,
-            (l) => l.toUpperCase() //Capitalize first letter
-          );
-          return movie;
-        });
-        this.setState({ movies, displayError: false });
-      })
-      .catch(() => {
-        const errorMessage =
-          this.state.searchQuery.trim().length < 3
-            ? 'Search query must be at least three characters long!'
-            : 'No movies found. Try searching for something else!';
-        this.setState({ displayError: true, errorMessage, movies: [] });
-      });
+  // Handles state update after API request is finished
+  handleSearchRequest = (movies, success, errorMessage = '') => {
+    if (success) this.setState({ movies, displayError: false });
+    else this.setState({ displayError: true, errorMessage, movies: [] });
   };
 
   // Updates the search query
-  handleUpdateQuery = (query) => {
-    this.setState({ searchQuery: query });
+  handleUpdateQuery = (searchQuery) => {
+    this.setState({ searchQuery });
   };
 
   // Updates the favorite status of a movie item
@@ -53,15 +31,17 @@ class App extends React.Component {
   };
 
   render() {
+    const { displayError, errorMessage, searchQuery, movies } = this.state;
     return (
-      <div className="container">
+      <div className='container'>
         <Header
           onSearchRequest={this.handleSearchRequest}
           onUpdateQuery={this.handleUpdateQuery}
-          displayError={this.state.displayError}
-          errorMessage={this.state.errorMessage}
+          displayError={displayError}
+          errorMessage={errorMessage}
+          searchQuery={searchQuery}
         />
-        <Movies movies={this.state.movies} onFavorite={this.handleFavorite} />
+        <Movies movies={movies} onFavorite={this.handleFavorite} />
       </div>
     );
   }

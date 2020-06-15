@@ -1,8 +1,38 @@
 import React, { Component } from 'react';
 import Proptypes from 'prop-types';
+import { v4 as uuidv4 } from 'uuid';
+import Axios from 'axios';
 
 class Header extends Component {
+  // API request to OMDb
+  handleSearchRequest = (e) => {
+    e.preventDefault();
+    const { searchQuery, onSearchRequest } = this.props;
+    Axios.get(
+      'http://www.omdbapi.com/?apikey=83d7041f&plot=short&s=' + searchQuery
+    )
+      .then((response) => {
+        const movies = response.data.Search.map((movie) => {
+          movie = { ...movie, isFavorite: false, id: uuidv4() }; // Add custom props
+          movie.Type = movie.Type.replace(
+            /\b\w/g,
+            (l) => l.toUpperCase() //Capitalize first letter
+          );
+          return movie;
+        });
+        onSearchRequest(movies, true);
+      })
+      .catch(() => {
+        const errorMessage =
+          searchQuery.trim().length < 3
+            ? 'Search query must be at least three characters long!'
+            : 'No movies found. Try searching for something else!';
+        onSearchRequest([], false, errorMessage);
+      });
+  };
+
   render() {
+    const { onUpdateQuery, displayError, errorMessage } = this.props;
     return (
       <>
         <div id='header' className='text-center mt-4'>
@@ -19,10 +49,7 @@ class Header extends Component {
           </div>
           <form
             className='d-flex mt-3 col-12 col-lg-10 justify-content-center mx-auto p-0'
-            onSubmit={(e) => {
-              e.preventDefault();
-              this.props.onSearchRequest();
-            }}
+            onSubmit={(e) => this.handleSearchRequest(e)}
           >
             <div className='col-12 row justify-content-center p-0'>
               <input
@@ -31,7 +58,7 @@ class Header extends Component {
                 placeholder='Search for a movie, series or game'
                 className='col-12 col-md-7 form-control mr-md-2 '
                 autoFocus
-                onChange={(e) => this.props.onUpdateQuery(e.target.value)}
+                onChange={(e) => onUpdateQuery(e.target.value)}
               />
               <input
                 type='submit'
@@ -40,12 +67,8 @@ class Header extends Component {
               />
             </div>
           </form>
-          <p
-            className={
-              this.props.displayError ? 'd-block text-danger mt-4' : 'd-none'
-            }
-          >
-            {this.props.errorMessage}
+          <p className={displayError ? 'd-block text-danger mt-4' : 'd-none'}>
+            {errorMessage}
           </p>
         </div>
       </>
@@ -59,6 +82,7 @@ Header.propTypes = {
   onUpdateQuery: Proptypes.func.isRequired,
   displayError: Proptypes.bool.isRequired,
   errorMessage: Proptypes.string.isRequired,
+  searchQuery: Proptypes.string.isRequired,
 };
 
 export default Header;

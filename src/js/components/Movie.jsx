@@ -14,26 +14,26 @@ class Movie extends Component {
     } = this.props.movie;
     return (
       <>
-        <div className="d-flex row col-12 px-0 mx-0">
-          <div className="col-12 d-flex flex-column text-center justify-content-between order-2 p-0 my-4 col-md-6 order-md-1">
+        <div className='d-flex row col-12 px-0 mx-0'>
+          <div className='col-12 d-flex flex-column text-center justify-content-between order-2 p-0 my-4 col-md-6 order-md-1'>
             <div>
               <h1>{Title}</h1>
-              <p className="text-secondary item-details">
+              <p className='text-secondary item-details'>
                 {
                   <i
                     className={
                       Type === 'Game' ? 'fas fa-gamepad' : 'fas fa-video'
                     }
-                    title="Type"
+                    title='Type'
                   ></i>
                 }
                 {Type}
               </p>
-              <p className="text-secondary item-details">
-                {<i className="fas fa-calendar-alt" title="Released in"></i>}
+              <p className='text-secondary item-details'>
+                {<i className='fas fa-calendar-alt' title='Released in'></i>}
                 {Year}
               </p>
-              <div className="favorites mb-2">
+              <div className='favorites mb-2'>
                 <i
                   className={isFavorite ? 'fas fa-heart' : 'far fa-heart'}
                   title={
@@ -44,18 +44,18 @@ class Movie extends Component {
               </div>
             </div>
 
-            <div className="button_cont text-center">
+            <div className='button_cont text-center'>
               <a
-                className="btn"
+                className='btn'
                 href={'https://www.imdb.com/title/' + imdbID}
-                target="_blank"
-                rel="noopener noreferrer"
+                target='_blank'
+                rel='noopener noreferrer'
               >
-                <i className="fab fa-imdb"></i>Read more on IMDb
+                <i className='fab fa-imdb'></i>Read more on IMDb
               </a>
             </div>
           </div>
-          <div className="class=col-12 d-flex flex-column order-1 p-0 my-4 col-md-6 img-container">
+          <div className='class=col-12 d-flex flex-column order-1 p-0 my-4 col-md-6 img-container'>
             <img
               src={
                 Poster === 'N/A'
@@ -64,7 +64,7 @@ class Movie extends Component {
               }
               alt={Title}
               title={Title}
-              className="rounded shadow align-self-center"
+              className='rounded shadow align-self-center'
             />
           </div>
         </div>

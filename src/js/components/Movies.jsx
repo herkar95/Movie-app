@@ -4,14 +4,11 @@ import Proptypes from 'prop-types';
 
 class Movies extends Component {
   render() {
+    const { movies, onFavorite } = this.props;
     return (
-      <div className="col-10 mx-auto mt-4 movies-container p-0">
-        {this.props.movies.map((movie) => (
-          <Movie
-            movie={movie}
-            key={movie.id}
-            onFavorite={this.props.onFavorite}
-          />
+      <div className='col-10 mx-auto mt-4 movies-container p-0'>
+        {movies.map((movie) => (
+          <Movie movie={movie} key={movie.id} onFavorite={onFavorite} />
         ))}
       </div>
     );
