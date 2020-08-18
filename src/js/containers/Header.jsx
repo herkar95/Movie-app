@@ -9,7 +9,7 @@ class Header extends Component {
     e.preventDefault();
     const { searchQuery, onSearchRequest } = this.props;
     Axios.get(
-      'http://www.omdbapi.com/?apikey=83d7041f&plot=short&s=' + searchQuery
+      'https://www.omdbapi.com/?apikey=83d7041f&plot=short&s=' + searchQuery
     )
       .then((response) => {
         const movies = response.data.Search.map((movie) => {
