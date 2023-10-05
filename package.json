@@ -10,7 +10,7 @@
     "axios": "^0.21.1",
     "bootstrap": "^4.4.1",
     "eelctron": "0.0.1-security",
-    "electron": "^9.0.0",
+    "electron": "^22.3.25",
     "g": "^2.0.1",
     "npm": "^6.14.8",
     "react": "^16.13.1",
